@@ -48,10 +48,10 @@
             overflow: hidden; /* App-like feel */
         }
 
-        /* App Container (Mobile Simulator on Desktop) */
+        /* App Container */
         .ios-app {
             width: 100%;
-            max-width: 600px; /* Tablet/Desktop limit */
+            max-width: 600px;
             height: 100vh;
             background: var(--ios-bg);
             display: flex;
@@ -64,7 +64,7 @@
            2. HEADER & NAVIGATION
            ========================================= */
         .ios-header {
-            padding: 50px 20px 10px; /* Top padding for notch area */
+            padding: 50px 20px 10px;
             background: rgba(28, 28, 30, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -78,13 +78,12 @@
         .ios-title { font-size: 34px; font-weight: 800; letter-spacing: -0.5px; }
         .ios-subtitle { font-size: 13px; color: var(--ios-text-secondary); font-weight: 600; text-transform: uppercase; }
 
-        /* Content Scroll Area */
         .ios-content {
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 20px;
-            padding-bottom: 100px; /* Space for tab bar */
+            padding-bottom: 100px;
             scroll-behavior: smooth;
         }
 
@@ -99,7 +98,7 @@
             border-top: 0.5px solid var(--ios-separator);
             display: flex;
             justify-content: space-around;
-            padding-bottom: 20px; /* Safe area */
+            padding-bottom: 20px;
             z-index: 200;
         }
 
@@ -120,9 +119,8 @@
         .tab-icon { font-size: 24px; }
 
         /* =========================================
-           3. UI COMPONENTS (iOS Style)
+           3. UI COMPONENTS
            ========================================= */
-        /* Grouped List Style */
         .ios-list-group {
             background: var(--ios-card);
             border-radius: var(--radius-m);
@@ -156,7 +154,7 @@
             border: none;
             color: var(--ios-primary);
             font-size: 16px;
-            text-align: left; /* RTL support handled by dir="rtl" */
+            text-align: left;
             font-family: inherit;
         }
         .item-input::placeholder { color: var(--ios-text-secondary); opacity: 0.5; }
@@ -167,12 +165,11 @@
             border: none;
             color: var(--ios-primary);
             font-size: 16px;
-            direction: ltr; /* Align select arrows nicely */
+            direction: ltr;
             appearance: none;
             text-align: right;
         }
 
-        /* Buttons */
         .ios-btn {
             background: var(--ios-card);
             color: var(--ios-primary);
@@ -190,11 +187,9 @@
             gap: 8px;
         }
         .ios-btn:active { background: rgba(255,255,255,0.1); }
-        
         .btn-primary { background: var(--ios-primary); color: white; }
         .btn-danger { color: var(--ios-danger); }
 
-        /* File Upload */
         .file-upload-wrapper {
             position: relative;
             overflow: hidden;
@@ -205,13 +200,12 @@
             position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
         }
 
-        /* Views Logic */
         .view-section { display: none; animation: fadeIn 0.3s ease; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* =========================================
-           4. PREVIEW & EDITOR (Refined)
+           4. PREVIEW & EDITOR (FIXED FOR PRINT & IMG)
            ========================================= */
         .preview-container {
             display: flex;
@@ -221,7 +215,7 @@
             margin-top: 10px;
         }
 
-        /* Scalable A4 Wrapper */
+        /* Wrapper for A4 page */
         .a4-wrapper {
             width: 210mm;
             height: 297mm;
@@ -229,29 +223,43 @@
             color: black;
             position: relative;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            /* Scale logic handled in JS for responsiveness */
             transform-origin: top center;
             padding: 20mm;
             overflow: hidden; 
             z-index: 1;
-            /* Default background settings */
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            background-position: center;
         }
 
-        /* --- SIMPLE IMAGE LOGIC (FIXED) --- */
+        /* --- NEW IMAGE HANDLING (STRICT OVERFLOW FIX) --- */
+        /* The Image Element itself */
+        #coverImgDisplay {
+            position: absolute;
+            top: 0; 
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            /* Using fill to stretch exactly to A4, or use 'cover' to crop but fill. 
+               'fill' guarantees no spill if width/height are 100%. */
+            object-fit: fill; 
+            z-index: 5;
+            display: none; /* Hidden by default */
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        /* While image is active, hide text content */
+        .a4-wrapper.has-image .report-content-wrapper {
+            display: none !important;
+        }
         
-        /* When image is uploaded: Just show the image on the wrapper */
-        .a4-wrapper.has-image {
-            /* Important: We rely on JS to set background-image directly now to avoid variable issues */
-            background-size: 100% 100% !important; /* Force fit to A4 dimensions */
-            padding: 0 !important; /* Remove padding so image touches edges */
+        /* While image is active, ensure image is displayed */
+        .a4-wrapper.has-image #coverImgDisplay {
+            display: block !important;
         }
-
-        /* Hide text content when image is active */
-        .a4-wrapper.has-image .report-content-wrapper { 
-            display: none !important; 
+        
+        /* Remove padding when image is present to allow full bleed */
+        .a4-wrapper.has-image {
+            padding: 0 !important;
         }
 
         /* Editor Paper */
@@ -268,7 +276,6 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             overflow-wrap: break-word;
         }
-        
         .editor-paper:focus { box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.5); }
 
         /* Toolbar */
@@ -279,9 +286,9 @@
             padding: 10px 0;
             margin-bottom: 10px;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
+            scrollbar-width: none;
         }
-        .editor-toolbar::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome/Safari */
+        .editor-toolbar::-webkit-scrollbar { display: none; }
 
         .toolbar-btn {
             background: var(--ios-card);
@@ -299,7 +306,6 @@
         .toolbar-btn:active { background: var(--ios-primary); color: white; }
         .toolbar-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
-        /* Credits */
         .ios-credits {
             text-align: center;
             margin-top: 30px;
@@ -334,89 +340,130 @@
         .font-amiri { font-family: 'Amiri', serif !important; }
         .font-poppins { font-family: 'Poppins', sans-serif !important; }
 
-        /* PRINT */
+        /* =========================================
+           6. PRINT STYLES (CRITICAL FIX)
+           ========================================= */
         @media print {
-            body, .ios-app { 
+            /* Force reset of all margins to prevent spillover */
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            html, body { 
                 background: white; 
-                width: 100%; 
-                height: auto; 
-                margin: 0; 
-                padding: 0; 
+                margin: 0 !important; 
+                padding: 0 !important; 
                 display: block; 
-                overflow: visible; 
+                height: 100%;
+                width: 100%;
+                overflow: visible !important;
             }
             
-            /* Hide UI Elements */
-            .ios-header, 
-            .ios-tab-bar, 
-            .editor-toolbar, 
-            .ios-credits, 
-            #view-settings, /* Hide settings page */
-            .ios-list-header, /* Hide headers like "Word Count" */
-            .btn-primary, /* Hide print button inside view */
-            .preview-container button /* Safety hide buttons */
-            { 
+            .ios-app {
+                width: 100%; max-width: none;
+                height: auto;
+                background: white;
+                box-shadow: none;
+                position: static;
+                display: block;
+                overflow: visible !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Hide User Interface */
+            .ios-header, .ios-tab-bar, .editor-toolbar, .ios-credits, 
+            #view-settings, .ios-list-header, .btn-primary, .preview-container button { 
                 display: none !important; 
             }
 
-            /* Reset Content Container */
+            /* Show Content */
             .ios-content {
                 display: block !important;
                 padding: 0 !important;
                 margin: 0 !important;
-                overflow: visible !important;
                 height: auto !important;
+                overflow: visible !important;
+                width: 100%;
             }
 
-            /* Force Show Printable Views */
+            /* Views */
             #view-cover, #view-editor {
                 display: block !important;
                 opacity: 1 !important;
                 transform: none !important;
                 height: auto !important;
                 overflow: visible !important;
-            }
-
-            /* Cover Page Specifics */
-            #view-cover {
-                page-break-after: always; /* Force break after cover */
-            }
-
-            .preview-container {
-                display: block !important; /* Remove flex centering */
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 100%;
             }
 
-            /* Elements Dimensions */
-            .a4-wrapper, .editor-paper { 
+            /* Page Formatting */
+            #view-cover { 
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+            .preview-container { 
+                display: block !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                width: 100%;
+            }
+
+            /* A4 Wrapper Print Settings - STRICT SIZING */
+            .a4-wrapper { 
+                width: 210mm !important; 
+                height: 297mm !important;
+                max-height: 297mm !important;
+                margin: 0 !important; /* Zero margin to fit page exactly */
+                padding: 20mm !important;
                 box-shadow: none !important; 
                 border: none !important;
-                margin: 0 auto !important; 
                 transform: none !important; 
-                width: 210mm !important; 
-                height: 297mm !important; /* Force A4 height for cover */
-                min-height: 297mm !important;
+                overflow: hidden !important; /* Force Clip any bleeding content */
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
+                position: relative !important;
+                page-break-after: always;
+                box-sizing: border-box;
             }
-            
-            /* Allow editor text to flow beyond one page */
+
+            /* Editor Content */
             .editor-paper {
+                width: 210mm !important;
+                margin: 0 auto !important;
+                padding: 25.4mm !important;
+                box-shadow: none !important;
+                border: none !important;
+                min-height: auto !important;
                 height: auto !important;
                 overflow: visible !important;
             }
 
-            /* Reset Colors */
-            * { 
-                color: black !important; 
-                text-shadow: none !important;
+            /* Ensure Text Color is Black */
+            * { color: black !important; text-shadow: none !important; }
+            
+            /* IMAGE PRINT FIX - FORCE CONTAINMENT */
+            .a4-wrapper.has-image {
+                padding: 0 !important;
+                background: none !important;
+                margin: 0 !important;
             }
             
-            /* Fix Backgrounds for Images */
-            .a4-wrapper.has-image {
-                color: white !important; 
-                background-size: 100% 100% !important;
+            #coverImgDisplay {
+                display: none; 
+            }
+            
+            .a4-wrapper.has-image #coverImgDisplay {
+                display: block !important;
+                position: absolute !important;
+                top: 0; left: 0;
+                width: 210mm !important;
+                height: 297mm !important;
+                object-fit: fill !important;
+                z-index: 5;
             }
         }
     </style>
@@ -438,7 +485,7 @@
         <!-- Main Content -->
         <main class="ios-content">
             
-            <!-- VIEW 1: SETTINGS (Edit) -->
+            <!-- VIEW 1: SETTINGS -->
             <div id="view-settings" class="view-section active">
                 
                 <div class="ios-list-header">معلومات الغلاف</div>
@@ -513,6 +560,9 @@
                 <div class="ios-list-header" style="text-align:center; margin-bottom:10px;">معاينة الغلاف (A4)</div>
                 <div class="preview-container" id="previewContainer">
                     <div id="a4Page" class="a4-wrapper font-tajawal" data-theme="formal">
+                        <!-- NEW: Real Image Element for printing support -->
+                        <img id="coverImgDisplay" src="" alt="Cover Image">
+                        
                         <div class="report-content-wrapper">
                             <div class="report-header">
                                 <div class="uni-logo-placeholder">🏛️</div>
@@ -538,32 +588,16 @@
                     <button class="toolbar-btn" onclick="fmt('bold')" title="عريض"><b>B</b></button>
                     <button class="toolbar-btn" onclick="fmt('italic')" title="مائل"><i>I</i></button>
                     <button class="toolbar-btn" onclick="fmt('underline')" title="تسطير"><u>U</u></button>
-                    
                     <div style="width:1px; background:var(--ios-separator); margin:0 5px;"></div>
-                    
-                    <button class="toolbar-btn" onclick="fmt('justifyRight')" title="يمين">
-                        <svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zM3 3v2h18V3H3z"/></svg>
-                    </button>
-                    <button class="toolbar-btn" onclick="fmt('justifyCenter')" title="وسط">
-                        <svg viewBox="0 0 24 24"><path d="M7 21h10v-2H7v2zM3 17h18v-2H3v2zm4-4h10v-2H7v2zM3 9h18V7H3v2zm4-4h10V3H7v2z"/></svg>
-                    </button>
-                    <button class="toolbar-btn" onclick="fmt('justifyLeft')" title="يسار">
-                        <svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg>
-                    </button>
-
+                    <button class="toolbar-btn" onclick="fmt('justifyRight')" title="يمين"><svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zM3 3v2h18V3H3z"/></svg></button>
+                    <button class="toolbar-btn" onclick="fmt('justifyCenter')" title="وسط"><svg viewBox="0 0 24 24"><path d="M7 21h10v-2H7v2zM3 17h18v-2H3v2zm4-4h10v-2H7v2zM3 9h18V7H3v2zm4-4h10V3H7v2z"/></svg></button>
+                    <button class="toolbar-btn" onclick="fmt('justifyLeft')" title="يسار"><svg viewBox="0 0 24 24"><path d="M3 21h18v-2H3v2zm0-4h12v-2H3v2zm0-4h18v-2H3v2zm0-4h12V7H3v2zm0-6v2h18V3H3z"/></svg></button>
                     <div style="width:1px; background:var(--ios-separator); margin:0 5px;"></div>
-
-                    <button class="toolbar-btn" onclick="setDir('rtl')" title="اتجاه عربي (RTL)">
-                        <span style="font-size:12px">RTL</span>
-                    </button>
-                    <button class="toolbar-btn" onclick="setDir('ltr')" title="اتجاه إنجليزي (LTR)">
-                        <span style="font-size:12px">LTR</span>
-                    </button>
-
+                    <button class="toolbar-btn" onclick="setDir('rtl')" title="عربي">RTL</button>
+                    <button class="toolbar-btn" onclick="setDir('ltr')" title="إنجليزي">LTR</button>
                     <div style="width:1px; background:var(--ios-separator); margin:0 5px;"></div>
-
-                    <button class="toolbar-btn" onclick="setSize(5)" title="تكبير الخط">A+</button>
-                    <button class="toolbar-btn" onclick="setSize(3)" title="تصغير الخط">A-</button>
+                    <button class="toolbar-btn" onclick="setSize(5)" title="تكبير">A+</button>
+                    <button class="toolbar-btn" onclick="setSize(3)" title="تصغير">A-</button>
                     <button class="toolbar-btn" onclick="insertBreak()" title="فاصل صفحات">📄</button>
                 </div>
                 
@@ -578,45 +612,36 @@
         <!-- Tab Bar Navigation -->
         <nav class="ios-tab-bar">
             <div class="tab-item active" onclick="switchView('settings', this)">
-                <div class="tab-icon">⚙️</div>
-                <span>إعدادات</span>
+                <div class="tab-icon">⚙️</div><span>إعدادات</span>
             </div>
             <div class="tab-item" onclick="switchView('cover', this)">
-                <div class="tab-icon">📄</div>
-                <span>الغلاف</span>
+                <div class="tab-icon">📄</div><span>الغلاف</span>
             </div>
             <div class="tab-item" onclick="switchView('editor', this)">
-                <div class="tab-icon">📝</div>
-                <span>كتابة</span>
+                <div class="tab-icon">📝</div><span>كتابة</span>
             </div>
         </nav>
     </div>
 
     <script>
-        // --- Navigation Logic ---
+        // --- Navigation ---
         function switchView(viewId, el) {
             document.querySelectorAll('.view-section').forEach(d => d.classList.remove('active'));
             document.getElementById('view-' + viewId).classList.add('active');
-            
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
             if(el) el.classList.add('active');
-
             if(viewId === 'cover') fitPreview();
         }
 
-        // --- Fit A4 to Mobile Screen ---
         function fitPreview() {
             const wrapper = document.getElementById('a4Page');
             const container = document.getElementById('previewContainer');
             const width = container.offsetWidth;
-            // A4 ratio 210/297 = ~0.707
-            // We scale it based on width
             const a4PixelWidth = 794; 
-            const scaleRatio = (width - 40) / a4PixelWidth; // 40px padding
-            
+            const scaleRatio = (width - 40) / a4PixelWidth;
             if(width < a4PixelWidth) {
                 wrapper.style.transform = `scale(${scaleRatio})`;
-                wrapper.style.marginBottom = `-${(1 - scaleRatio) * 1123}px`; // Adjust height gap
+                wrapper.style.marginBottom = `-${(1 - scaleRatio) * 1123}px`;
             } else {
                 wrapper.style.transform = 'scale(1)';
                 wrapper.style.marginBottom = '0';
@@ -624,16 +649,17 @@
         }
         window.addEventListener('resize', fitPreview);
 
-        // --- Core Logic ---
+        // --- Logic ---
         const a4 = document.getElementById('a4Page');
         const editor = document.getElementById('reportEditor');
+        const coverImgDisplay = document.getElementById('coverImgDisplay');
 
         function updateTheme() { a4.setAttribute('data-theme', document.getElementById('themeSelect').value); }
         
         function updateFont() { 
             const f = document.getElementById('fontSelect').value;
             a4.className = `a4-wrapper ${f}`;
-            if(a4.classList.contains('has-image')) a4.classList.add('has-image');
+            if(coverImgDisplay.src) a4.classList.add('has-image');
             editor.className = `editor-paper ${f}`;
         }
 
@@ -641,8 +667,7 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Set style directly to ensure it renders
-                    a4.style.backgroundImage = `url('${e.target.result}')`;
+                    coverImgDisplay.src = e.target.result;
                     a4.classList.add('has-image');
                     document.getElementById('removeImgBtn').style.display = 'inline-block';
                 }
@@ -651,7 +676,7 @@
         }
 
         function removeCoverImage() {
-            a4.style.backgroundImage = '';
+            coverImgDisplay.src = '';
             a4.classList.remove('has-image');
             document.getElementById('coverImageInput').value = '';
             document.getElementById('removeImgBtn').style.display = 'none';
@@ -676,37 +701,21 @@
             stds.forEach(s => { if(s.value) list.innerHTML += `<div>${s.value}</div>`; });
         }
 
-        // --- Editor Logic ---
-        function fmt(cmd, val=null) { 
-            document.execCommand(cmd, false, val); 
-            editor.focus(); 
-        }
-        function setSize(s) { 
-            document.execCommand('fontSize', false, s); 
-            editor.focus(); 
-        }
-        function insertBreak() { 
-            document.execCommand('insertHTML', false, '<div class="page-break-marker"></div><br>'); 
-        }
-        
-        // New Direction Logic
+        function fmt(cmd, val=null) { document.execCommand(cmd, false, val); editor.focus(); }
+        function setSize(s) { document.execCommand('fontSize', false, s); editor.focus(); }
+        function insertBreak() { document.execCommand('insertHTML', false, '<div class="page-break-marker"></div><br>'); }
         function setDir(dir) {
             const sel = window.getSelection();
             if (sel.rangeCount > 0) {
                 const node = sel.anchorNode;
                 const element = node.nodeType === 3 ? node.parentNode : node;
                 let block = element;
-                while(block && block !== editor && !['DIV','P','LI'].includes(block.tagName)) {
-                    block = block.parentNode;
-                }
-                
+                while(block && block !== editor && !['DIV','P','LI'].includes(block.tagName)) block = block.parentNode;
                 if(block && block !== editor) {
                     block.style.direction = dir;
                     block.style.textAlign = dir === 'rtl' ? 'right' : 'left';
                 } else {
-                    const id = "dir-" + Date.now();
-                    const html = `<div style="direction:${dir}; text-align:${dir === 'rtl' ? 'right' : 'left'}">${sel.toString() || '&nbsp;'}</div>`;
-                    document.execCommand('insertHTML', false, html);
+                    document.execCommand('insertHTML', false, `<div style="direction:${dir}; text-align:${dir==='rtl'?'right':'left'}">${sel.toString()||'&nbsp;'}</div>`);
                 }
             }
             editor.focus();
