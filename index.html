@@ -336,17 +336,87 @@
 
         /* PRINT */
         @media print {
-            body, .ios-app { background: white; height: auto; display: block; overflow: visible; }
-            .ios-header, .ios-tab-bar, .ios-content, .editor-toolbar, .ios-credits { display: none !important; }
-            .view-section { display: block !important; }
-            .a4-wrapper, .editor-paper { box-shadow: none; margin: 0; transform: none !important; width: 210mm; page-break-after: always; }
-            /* Reset colors for print */
-            * { color: black !important; }
+            body, .ios-app { 
+                background: white; 
+                width: 100%; 
+                height: auto; 
+                margin: 0; 
+                padding: 0; 
+                display: block; 
+                overflow: visible; 
+            }
             
-            /* Ensure background prints */
-            .a4-wrapper.has-image {
-                -webkit-print-color-adjust: exact;
+            /* Hide UI Elements */
+            .ios-header, 
+            .ios-tab-bar, 
+            .editor-toolbar, 
+            .ios-credits, 
+            #view-settings, /* Hide settings page */
+            .ios-list-header, /* Hide headers like "Word Count" */
+            .btn-primary, /* Hide print button inside view */
+            .preview-container button /* Safety hide buttons */
+            { 
+                display: none !important; 
+            }
+
+            /* Reset Content Container */
+            .ios-content {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                overflow: visible !important;
+                height: auto !important;
+            }
+
+            /* Force Show Printable Views */
+            #view-cover, #view-editor {
+                display: block !important;
+                opacity: 1 !important;
+                transform: none !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            /* Cover Page Specifics */
+            #view-cover {
+                page-break-after: always; /* Force break after cover */
+            }
+
+            .preview-container {
+                display: block !important; /* Remove flex centering */
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Elements Dimensions */
+            .a4-wrapper, .editor-paper { 
+                box-shadow: none !important; 
+                border: none !important;
+                margin: 0 auto !important; 
+                transform: none !important; 
+                width: 210mm !important; 
+                height: 297mm !important; /* Force A4 height for cover */
+                min-height: 297mm !important;
                 print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+            
+            /* Allow editor text to flow beyond one page */
+            .editor-paper {
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            /* Reset Colors */
+            * { 
+                color: black !important; 
+                text-shadow: none !important;
+            }
+            
+            /* Fix Backgrounds for Images */
+            .a4-wrapper.has-image {
+                color: white !important; 
+                background-size: 100% 100% !important;
             }
         }
     </style>
