@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صانع تقارير جامعية احترافي</title>
+    <title>المحرر الجامعي الشامل | غلاف + تقرير</title>
     <style>
         /* =========================================
            1. CORE VARIABLES & RESET
            ========================================= */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 0.5);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
             --primary-color: #2563eb;
@@ -17,13 +17,17 @@
             --text-main: #1e293b;
             --text-secondary: #64748b;
             --danger: #ef4444;
+            --success: #10b981;
             
-            /* Enhanced Font Stacks */
+            /* Font Stacks */
             --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             --font-serif: 'Times New Roman', Times, serif;
             --font-academic: 'Traditional Arabic', 'Simplified Arabic', serif;
-            --font-kufi: 'Tahoma', 'Segoe UI', sans-serif; /* Simulating Kufi with bold sans */
+            --font-kufi: 'Tahoma', 'Segoe UI', sans-serif;
             --font-digital: 'Courier New', Courier, monospace;
+
+            /* Transitions */
+            --trans-speed: 0.3s;
         }
 
         * {
@@ -35,17 +39,17 @@
 
         body {
             font-family: var(--font-sans);
-            background: linear-gradient(135deg, #f0f9ff 0%, #cbebff 100%);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
             color: var(--text-main);
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             padding: 20px;
             overflow-x: hidden;
         }
 
-        /* Decorative Background Elements */
+        /* Decorative Background */
         .bg-orb {
             position: fixed;
             border-radius: 50%;
@@ -57,131 +61,222 @@
         .bg-orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: #ddd6fe; }
 
         /* =========================================
-           2. LAYOUT
+           2. NAVIGATION TABS
+           ========================================= */
+        .main-nav {
+            display: flex;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            padding: 5px;
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 25px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            border: 1px solid var(--glass-border);
+        }
+
+        .nav-item {
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item:hover { color: var(--primary-color); background: rgba(37, 99, 235, 0.05); }
+
+        .nav-item.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* =========================================
+           3. LAYOUT & SECTIONS
            ========================================= */
         .app-container {
-            display: flex;
-            gap: 30px;
             width: 100%;
             max-width: 1400px;
+            position: relative;
+        }
+
+        .section-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .section-view.active {
+            display: flex; /* Or block depending on specific layout */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Cover Section Specifics */
+        #view-cover {
+            gap: 30px;
             flex-wrap: wrap;
         }
 
-        /* Left Side: Controls */
+        /* Editor Section Specifics */
+        #view-editor {
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* =========================================
+           4. CONTROLS PANEL (Shared Styles)
+           ========================================= */
         .controls-panel {
             flex: 1;
             min-width: 320px;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 25px;
             box-shadow: var(--glass-shadow);
             height: fit-content;
-            position: sticky;
-            top: 20px;
-            z-index: 10;
+            /* position: sticky is handled in media queries */
         }
 
-        /* Right Side: Preview */
         .preview-panel {
             flex: 2;
             min-width: 350px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            container-type: inline-size;
             padding-bottom: 50px;
+            container-type: inline-size;
         }
 
-        /* =========================================
-           3. CONTROLS UI
-           ========================================= */
-        h1 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        /* Form Elements */
+        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #0f172a; display: flex; align-items: center; gap: 10px; }
         .form-group { margin-bottom: 15px; }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); }
         input[type="text"], select {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            background: rgba(255, 255, 255, 0.9);
-            font-family: inherit;
-            font-size: 0.95rem;
+            width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.9); font-family: inherit; font-size: 0.95rem;
             transition: all 0.2s ease;
         }
+        input[type="text"]:focus, select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); background: #fff; }
 
-        input[type="text"]:focus, select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            background: #fff;
-        }
-
-        .student-list { display: flex; flex-direction: column; gap: 8px; }
-        
-        .student-entry { display: flex; gap: 8px; animation: slideDown 0.2s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-
-        .btn {
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            font-family: inherit;
-            font-weight: 600;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
+        /* Buttons */
+        .btn { border: none; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 600; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-icon { padding: 10px; flex-shrink: 0; }
-
-        .btn-add {
-            background: #f1f5f9;
-            color: var(--primary-color);
-            padding: 8px;
-            width: 100%;
-            margin-top: 8px;
-            font-size: 0.9rem;
-        }
-        .btn-add:hover { background: #e2e8f0; }
-
+        .btn-add { background: #f1f5f9; color: var(--primary-color); padding: 8px; width: 100%; margin-top: 8px; }
         .btn-remove { background: #fee2e2; color: var(--danger); }
-        .btn-remove:hover { background: #fecaca; }
-
-        .btn-print {
-            background: var(--primary-color);
-            color: white;
-            padding: 14px;
-            width: 100%;
-            margin-top: 25px;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-        }
+        .btn-print { background: var(--primary-color); color: white; padding: 14px; width: 100%; margin-top: 25px; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
         .btn-print:hover { background: var(--primary-hover); transform: translateY(-1px); }
 
         .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .student-list { display: flex; flex-direction: column; gap: 8px; }
+        .student-entry { display: flex; gap: 8px; animation: slideDown 0.2s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* =========================================
-           4. A4 PAGE PREVIEW & THEMES
+           5. EDITOR STYLES (New Feature)
+           ========================================= */
+        .editor-wrapper {
+            width: 100%;
+            max-width: 210mm; /* A4 width */
+            margin: 0 auto;
+        }
+
+        /* Toolbar */
+        .editor-toolbar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 80px; /* Below nav */
+            z-index: 90;
+        }
+
+        .tool-group {
+            display: flex;
+            gap: 5px;
+            padding-left: 10px;
+            border-left: 1px solid #e2e8f0;
+            align-items: center;
+        }
+        .tool-group:last-child { border-left: none; }
+
+        .tool-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+        .tool-btn:hover { background: rgba(0,0,0,0.05); }
+        .tool-btn.active { background: #e0f2fe; color: var(--primary-color); }
+
+        /* The Paper */
+        .editor-paper {
+            background: white;
+            width: 100%;
+            min-height: 297mm;
+            padding: 25.4mm; /* Standard 1 inch margins */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            font-size: 14pt;
+            line-height: 1.6;
+            color: #000;
+            position: relative;
+            outline: none;
+            direction: rtl;
+        }
+
+        .editor-paper[contenteditable]:empty::before {
+            content: 'ابدأ كتابة التقرير هنا...';
+            color: #94a3b8;
+        }
+
+        /* Page Break Visual */
+        .page-break-marker {
+            border-bottom: 2px dashed #cbd5e1;
+            margin: 20px -25.4mm;
+            position: relative;
+            height: 20px;
+            page-break-after: always;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+        .page-break-marker::after { content: 'فاصل صفحات (عند الطباعة)'; background: #f1f5f9; padding: 0 10px; }
+
+        /* Stats Bar */
+        .editor-stats {
+            margin-top: 15px;
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            justify-content: flex-end;
+            padding: 0 10px;
+        }
+
+        /* =========================================
+           6. A4 PREVIEW (Cover)
            ========================================= */
         .a4-wrapper {
             background: white;
@@ -195,118 +290,62 @@
             overflow: hidden;
             color: #000;
         }
-
-        /* Common Elements */
+        /* ... (Kept existing theme styles below) ... */
         .report-header { margin-bottom: 40px; position: relative; z-index: 2; }
         .report-body { position: relative; z-index: 2; min-height: 500px; display: flex; flex-direction: column; justify-content: center; }
-        .report-footer { 
-            position: absolute; bottom: 15mm; left: 0; width: 100%; 
-            text-align: center; padding: 0 20mm; z-index: 2;
-        }
-
-        .uni-logo-placeholder {
-            width: 80px; height: 80px; background: #f8fafc; border: 2px dashed #cbd5e1;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; margin: 0 auto 15px; color: #64748b;
-        }
-        
+        .report-footer { position: absolute; bottom: 15mm; left: 0; width: 100%; text-align: center; padding: 0 20mm; z-index: 2; }
+        .uni-logo-placeholder { width: 80px; height: 80px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 15px; color: #64748b; }
         .uni-name-text { font-size: 1.4rem; font-weight: bold; margin-bottom: 5px; }
         .report-title { font-size: 2.2rem; font-weight: 800; margin: 30px 0; line-height: 1.3; }
-        
         .report-meta { width: 100%; max-width: 80%; margin: 0 auto; text-align: right; }
         .meta-row { display: flex; margin-bottom: 12px; font-size: 1.1rem; border-bottom: 1px solid transparent; padding-bottom: 4px; }
         .meta-label { font-weight: bold; width: 140px; flex-shrink: 0; opacity: 0.8; }
         .meta-value { flex-grow: 1; }
-        .students-grid { display: flex; flex-direction: column; gap: 4px; }
-
-
-        /* --- THEMES --- */
-
-        /* 1. Formal (Classic) */
-        [data-theme="formal"] {
-            border: 1px solid #ccc;
-        }
+        
+        /* Themes & Fonts */
+        [data-theme="formal"] { border: 1px solid #ccc; }
         [data-theme="formal"] .report-header { text-align: center; border-bottom: 3px double #000; padding-bottom: 20px; }
         [data-theme="formal"] .report-title { text-align: center; text-decoration: underline; text-underline-offset: 8px; }
         [data-theme="formal"] .report-meta { border: 1px solid #000; padding: 20px; }
 
-        /* 2. Modern (Blue Gradient) */
         [data-theme="modern"] .report-header { text-align: center; }
-        [data-theme="modern"]::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 20mm;
-            background: linear-gradient(to right, #2563eb, #60a5fa);
-        }
+        [data-theme="modern"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 20mm; background: linear-gradient(to right, #2563eb, #60a5fa); }
         [data-theme="modern"] .uni-logo-placeholder { background: white; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-top: 5mm; }
         [data-theme="modern"] .report-title { color: #2563eb; text-align: center; }
-        [data-theme="modern"] .meta-label { color: #2563eb; }
         [data-theme="modern"] .report-footer { border-top: 2px solid #2563eb; padding-top: 10px; }
 
-        /* 3. Corporate (Side Bar) */
         [data-theme="corporate"] { padding: 0; display: flex; }
-        [data-theme="corporate"]::before {
-            content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 60mm;
-            background: #1e293b; z-index: 0;
-        }
-        [data-theme="corporate"] .report-content-wrapper {
-            position: relative; z-index: 1; width: 100%; height: 100%; padding: 20mm;
-            display: flex; flex-direction: column;
-        }
-        [data-theme="corporate"] .report-header { 
-            text-align: right; color: white; margin-right: -10mm; margin-top: 10mm;
-            margin-bottom: 60px;
-        }
-        [data-theme="corporate"] .uni-logo-placeholder { 
-            border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white;
-            margin: 0 0 20px auto; /* align right */
-        }
+        [data-theme="corporate"]::before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 60mm; background: #1e293b; z-index: 0; }
+        [data-theme="corporate"] .report-content-wrapper { position: relative; z-index: 1; width: 100%; height: 100%; padding: 20mm; display: flex; flex-direction: column; }
+        [data-theme="corporate"] .report-header { text-align: right; color: white; margin-right: -10mm; margin-top: 10mm; margin-bottom: 60px; }
+        [data-theme="corporate"] .uni-logo-placeholder { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; margin: 0 0 20px auto; }
         [data-theme="corporate"] .uni-name-text { color: white; }
         [data-theme="corporate"] .report-body { text-align: left; padding-right: 50mm; align-items: flex-start; }
         [data-theme="corporate"] .report-title { text-align: left; font-size: 3rem; color: #1e293b; border-left: 10px solid #f59e0b; padding-left: 20px; }
         [data-theme="corporate"] .report-meta { text-align: left; margin: 0; max-width: 100%; }
         [data-theme="corporate"] .meta-row { flex-direction: row; }
-        [data-theme="corporate"] .meta-label { width: 120px; color: #64748b; }
 
-        /* 4. Elegant (Minimal Serif) */
         [data-theme="elegant"] { border: 8px solid #f1f1f1; }
         [data-theme="elegant"] .report-header { text-align: center; }
         [data-theme="elegant"] .uni-logo-placeholder { display: none; }
         [data-theme="elegant"] .uni-name-text { font-family: var(--font-serif); font-style: italic; color: #555; font-size: 1.2rem; }
-        [data-theme="elegant"] .report-title { 
-            font-family: var(--font-serif); font-weight: normal; font-size: 2.8rem; 
-            border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 40px 0;
-            text-align: center;
-        }
+        [data-theme="elegant"] .report-title { font-family: var(--font-serif); font-weight: normal; font-size: 2.8rem; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 40px 0; text-align: center; }
         [data-theme="elegant"] .meta-row { justify-content: center; text-align: center; }
-        [data-theme="elegant"] .meta-label { color: #888; font-weight: normal; }
 
-        /* 5. Creative (Abstract Shapes) */
         [data-theme="creative"] { overflow: hidden; }
-        [data-theme="creative"]::before {
-            content: ''; position: absolute; top: -100px; left: -100px; width: 300px; height: 300px;
-            background: #ec4899; border-radius: 50%; opacity: 0.1;
-        }
-        [data-theme="creative"]::after {
-            content: ''; position: absolute; bottom: -50px; right: -50px; width: 400px; height: 400px;
-            background: #8b5cf6; border-radius: 50%; opacity: 0.1; z-index: 0;
-        }
-        [data-theme="creative"] .report-title {
-            background: linear-gradient(45deg, #ec4899, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900; text-align: center;
-        }
-        [data-theme="creative"] .uni-name-text { text-align: center; color: #8b5cf6; }
+        [data-theme="creative"]::before { content: ''; position: absolute; top: -100px; left: -100px; width: 300px; height: 300px; background: #ec4899; border-radius: 50%; opacity: 0.1; }
+        [data-theme="creative"]::after { content: ''; position: absolute; bottom: -50px; right: -50px; width: 400px; height: 400px; background: #8b5cf6; border-radius: 50%; opacity: 0.1; z-index: 0; }
+        [data-theme="creative"] .report-title { background: linear-gradient(45deg, #ec4899, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; text-align: center; }
         [data-theme="creative"] .report-header { text-align: center; }
 
-
-        /* --- FONTS --- */
+        /* Fonts */
         .font-sans { font-family: var(--font-sans) !important; }
         .font-serif { font-family: var(--font-serif) !important; }
         .font-academic { font-family: var(--font-academic) !important; }
         .font-kufi { font-family: var(--font-kufi) !important; font-weight: bold; }
         .font-digital { font-family: var(--font-digital) !important; letter-spacing: -1px; }
 
-        /* CSS Icons */
+        /* Icons */
         .icon { display: inline-block; width: 16px; height: 16px; position: relative; }
         .icon-plus::before, .icon-plus::after { content: ''; position: absolute; background: currentColor; top: 50%; left: 50%; transform: translate(-50%, -50%); }
         .icon-plus::before { width: 2px; height: 10px; }
@@ -314,15 +353,18 @@
         .icon-trash { border: 2px solid currentColor; border-top: none; width: 10px; height: 10px; margin: 2px auto 0; border-radius: 0 0 2px 2px; }
         .icon-trash::before { content: ''; position: absolute; top: -3px; left: -2px; width: 14px; height: 2px; background: currentColor; }
 
-
         /* =========================================
-           5. RESPONSIVENESS & PRINT
+           7. RESPONSIVE & PRINT
            ========================================= */
         @media (max-width: 900px) {
-            .app-container { flex-direction: column; }
+            #view-cover { flex-direction: column; }
             .preview-panel { padding-bottom: 20px; display: block; }
             .a4-wrapper { transform: scale(0.42); transform-origin: top center; margin: 0 auto; }
+            .editor-wrapper { transform: scale(0.9); transform-origin: top center; width: 100%; }
+            .editor-paper { padding: 15mm; }
+            .controls-panel { position: static; }
         }
+        
         @media (min-width: 901px) and (max-width: 1200px) {
             .a4-wrapper { transform: scale(0.65); transform-origin: top center; }
         }
@@ -332,47 +374,69 @@
 
         /* STRICT PRINT RULES */
         @media print {
-            /* Hide EVERYTHING first */
-            body * { visibility: hidden; }
-            
-            /* Clean up body */
             body { 
                 background: white; 
                 display: block; 
-                margin: 0; 
-                padding: 0; 
+                margin: 0; padding: 0; 
+                overflow: visible;
+                height: auto;
+            }
+
+            /* Hide Navigation and Tools */
+            .main-nav, .controls-panel, .editor-toolbar, .btn, .bg-orb, .editor-stats { 
+                display: none !important; 
+            }
+
+            .app-container { max-width: none; width: 100%; display: block; }
+            
+            /* FORCE BOTH SECTIONS TO SHOW IN ORDER */
+            .section-view { display: block !important; opacity: 1 !important; transform: none !important; }
+            
+            /* 1. Cover Page Print Style */
+            #view-cover { 
+                display: block !important; 
+                page-break-after: always; /* Force break after cover */
+            }
+            .preview-panel { display: block; padding: 0; width: 100%; }
+            
+            #a4Page {
+                position: relative;
+                width: 100%; max-width: 210mm;
+                min-height: 297mm;
+                margin: 0 auto;
+                padding: 20mm;
+                box-shadow: none; border: none;
+                transform: none !important;
+                page-break-after: always;
+            }
+
+            /* 2. Content Print Style */
+            #view-editor { 
+                display: block !important; 
+                margin-top: 0;
+                width: 100%;
+            }
+            .editor-wrapper { max-width: none; width: 100%; margin: 0; transform: none !important; }
+            
+            .editor-paper {
+                box-shadow: none;
+                padding: 0 20mm; /* Use margins for print */
+                margin: 0 auto;
+                width: 100%; max-width: 210mm;
+                min-height: auto; /* Let content flow */
                 overflow: visible;
             }
 
-            /* Show only the A4 Page and its children */
-            #a4Page, #a4Page * {
-                visibility: visible;
+            /* Page Breaks inside Editor */
+            .page-break-marker { 
+                border: none; margin: 0; height: 0; 
+                page-break-after: always; 
+                visibility: hidden; /* Hide the dashed line and text */
             }
 
-            /* Position the A4 page correctly */
-            #a4Page {
-                position: fixed;
-                left: 0;
-                top: 0;
-                width: 210mm;
-                height: 297mm;
-                margin: 0;
-                padding: 20mm; /* Re-apply default padding if lost */
-                box-shadow: none;
-                transform: none !important; /* IMPORTANT: Disable scaling */
-                border: none;
-            }
-
-            /* Specific Layout Adjustments for Themes in Print */
-            [data-theme="corporate"] {
-                display: flex; /* Ensure flex works for sidebar layout */
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            [data-theme="modern"]::before {
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
+            /* Fix themes for print */
+            [data-theme="modern"]::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            [data-theme="corporate"] { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
     </style>
 </head>
@@ -380,120 +444,173 @@
     <div class="bg-orb bg-orb-1"></div>
     <div class="bg-orb bg-orb-2"></div>
 
+    <!-- MAIN NAVIGATION -->
+    <nav class="main-nav">
+        <div class="nav-item active" onclick="switchTab('cover')">
+            <span>🎨</span> تصميم الغلاف
+        </div>
+        <div class="nav-item" onclick="switchTab('editor')">
+            <span>📝</span> كتابة التقرير
+        </div>
+    </nav>
+
     <div class="app-container">
-        <!-- Controls Panel -->
-        <aside class="controls-panel">
-            <h1>📄 بيانات التقرير</h1>
-
-            <div class="settings-grid">
-                <div class="form-group">
-                    <label>التصميم (Theme)</label>
-                    <select id="themeSelect" onchange="updateTheme()">
-                        <option value="formal">رسمي أكاديمي</option>
-                        <option value="modern">مودرن (أزرق)</option>
-                        <option value="corporate">شركات (Corporate)</option>
-                        <option value="elegant">أنيق (Elegant)</option>
-                        <option value="creative">إبداعي (Creative)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>نوع الخط</label>
-                    <select id="fontSelect" onchange="updateFont()">
-                        <option value="font-sans">حديث (Sans)</option>
-                        <option value="font-serif">تقليدي (Serif)</option>
-                        <option value="font-academic">أكاديمي (نسخ)</option>
-                        <option value="font-kufi">كوفي (عريض)</option>
-                        <option value="font-digital">رقمي (آلة كاتبة)</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>اسم الجامعة / المؤسسة</label>
-                <input type="text" id="uniName" placeholder="جامعة القاهرة - كلية العلوم" oninput="updatePreview()">
-            </div>
-
-            <div class="form-group">
-                <label>عنوان التقرير</label>
-                <input type="text" id="reportTitle" placeholder="تطبيقات الذكاء الاصطناعي" oninput="updatePreview()">
-            </div>
-
-            <div class="form-group">
-                <label>اسم المشرف</label>
-                <input type="text" id="supervisorName" placeholder="د. محمد أحمد" oninput="updatePreview()">
-            </div>
-
-            <div class="form-group">
-                <label>الطلاب المشاركون</label>
-                <div id="studentsContainer" class="student-list">
-                    <div class="student-entry">
-                        <input type="text" class="student-input" placeholder="اسم الطالب" oninput="updatePreview()" value="الطالب الأول">
+        
+        <!-- SECTION 1: COVER DESIGN -->
+        <section id="view-cover" class="section-view active">
+            <!-- Controls Panel -->
+            <aside class="controls-panel">
+                <h1>⚙️ إعدادات الغلاف</h1>
+                <div class="settings-grid">
+                    <div class="form-group">
+                        <label>التصميم (Theme)</label>
+                        <select id="themeSelect" onchange="updateTheme()">
+                            <option value="formal">رسمي أكاديمي</option>
+                            <option value="modern">مودرن (أزرق)</option>
+                            <option value="corporate">شركات (Corporate)</option>
+                            <option value="elegant">أنيق (Elegant)</option>
+                            <option value="creative">إبداعي (Creative)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>نوع الخط</label>
+                        <select id="fontSelect" onchange="updateFont()">
+                            <option value="font-sans">حديث (Sans)</option>
+                            <option value="font-serif">تقليدي (Serif)</option>
+                            <option value="font-academic">أكاديمي (نسخ)</option>
+                            <option value="font-kufi">كوفي (عريض)</option>
+                            <option value="font-digital">رقمي (آلة كاتبة)</option>
+                        </select>
                     </div>
                 </div>
-                <button class="btn btn-add" onclick="addStudentField()">
-                    <span class="icon icon-plus"></span>
-                    إضافة طالب
-                </button>
-            </div>
-            
-            <div class="form-group">
-                 <label>العام الدراسي / التاريخ</label>
-                 <input type="text" id="yearText" placeholder="2024 - 2025" oninput="updatePreview()">
-            </div>
 
-            <button class="btn btn-print" onclick="window.print()">
-                طباعة التقرير (PDF)
-                <span style="font-size:1.2em">🖨️</span>
-            </button>
-        </aside>
-
-        <!-- Preview Panel -->
-        <main class="preview-panel">
-            <div id="a4Page" class="a4-wrapper font-sans" data-theme="formal">
-                <!-- Wrapper for absolute positioning content needed for some themes -->
-                <div class="report-content-wrapper">
-                    
-                    <div class="report-header">
-                        <div class="uni-logo-placeholder">🏛️</div>
-                        <h2 class="uni-name-text" id="prevUni">جامعة القاهرة - كلية العلوم</h2>
-                    </div>
-
-                    <div class="report-body">
-                        <h1 class="report-title" id="prevTitle">تطبيقات الذكاء الاصطناعي في الطب</h1>
-                        
-                        <div class="report-meta">
-                            <div class="meta-row">
-                                <span class="meta-label">إشراف:</span>
-                                <span class="meta-value" id="prevSupervisor">د. محمد أحمد</span>
-                            </div>
-                            
-                            <div class="meta-row" style="align-items: flex-start;">
-                                <span class="meta-label">إعداد:</span>
-                                <div class="meta-value students-grid" id="prevStudents">
-                                    <div class="student-item">الطالب الأول</div>
-                                </div>
-                            </div>
-
-                             <div class="meta-row">
-                                <span class="meta-label">العام:</span>
-                                <span class="meta-value" id="prevYear">2024 - 2025</span>
-                            </div>
+                <div class="form-group">
+                    <label>اسم الجامعة / المؤسسة</label>
+                    <input type="text" id="uniName" placeholder="جامعة القاهرة - كلية العلوم" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>عنوان التقرير</label>
+                    <input type="text" id="reportTitle" placeholder="تطبيقات الذكاء الاصطناعي" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>اسم المشرف</label>
+                    <input type="text" id="supervisorName" placeholder="د. محمد أحمد" oninput="updatePreview()">
+                </div>
+                <div class="form-group">
+                    <label>الطلاب المشاركون</label>
+                    <div id="studentsContainer" class="student-list">
+                        <div class="student-entry">
+                            <input type="text" class="student-input" placeholder="اسم الطالب" oninput="updatePreview()" value="الطالب الأول">
                         </div>
                     </div>
-
-                    <footer class="report-footer">
-                        <!-- Footer Text removed as requested -->
-                    </footer>
+                    <button class="btn btn-add" onclick="addStudentField()"><span class="icon icon-plus"></span> إضافة طالب</button>
                 </div>
+                <div class="form-group">
+                     <label>العام الدراسي</label>
+                     <input type="text" id="yearText" placeholder="2024 - 2025" oninput="updatePreview()">
+                </div>
+            </aside>
+
+            <!-- Preview Panel -->
+            <main class="preview-panel">
+                <div id="a4Page" class="a4-wrapper font-sans" data-theme="formal">
+                    <div class="report-content-wrapper">
+                        <div class="report-header">
+                            <div class="uni-logo-placeholder">🏛️</div>
+                            <h2 class="uni-name-text" id="prevUni">جامعة القاهرة - كلية العلوم</h2>
+                        </div>
+                        <div class="report-body">
+                            <h1 class="report-title" id="prevTitle">تطبيقات الذكاء الاصطناعي في الطب</h1>
+                            <div class="report-meta">
+                                <div class="meta-row"><span class="meta-label">إشراف:</span><span class="meta-value" id="prevSupervisor">د. محمد أحمد</span></div>
+                                <div class="meta-row" style="align-items: flex-start;"><span class="meta-label">إعداد:</span><div class="meta-value students-grid" id="prevStudents"><div class="student-item">الطالب الأول</div></div></div>
+                                <div class="meta-row"><span class="meta-label">العام:</span><span class="meta-value" id="prevYear">2024 - 2025</span></div>
+                            </div>
+                        </div>
+                        <footer class="report-footer"></footer>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- SECTION 2: REPORT WRITING -->
+        <section id="view-editor" class="section-view">
+            <div class="editor-wrapper">
+                
+                <!-- Editor Toolbar -->
+                <div class="editor-toolbar">
+                    <div class="tool-group">
+                        <button class="tool-btn" onclick="execCmd('justifyRight')" title="محاذاة لليمين">➡️</button>
+                        <button class="tool-btn" onclick="execCmd('justifyCenter')" title="توسط">↔️</button>
+                        <button class="tool-btn" onclick="execCmd('justifyLeft')" title="محاذاة لليسار">⬅️</button>
+                    </div>
+                    <div class="tool-group">
+                        <button class="tool-btn" onclick="execCmd('bold')" title="عريض"><b>B</b></button>
+                        <button class="tool-btn" onclick="execCmd('italic')" title="مائل"><i>I</i></button>
+                        <button class="tool-btn" onclick="execCmd('underline')" title="تسطير"><u>U</u></button>
+                    </div>
+                    <div class="tool-group">
+                        <button class="tool-btn" onclick="changeSize('12pt')" title="خط صغير">S</button>
+                        <button class="tool-btn" onclick="changeSize('14pt')" title="خط متوسط">M</button>
+                        <button class="tool-btn" onclick="changeSize('18pt')" title="خط كبير">L</button>
+                    </div>
+                    <div class="tool-group">
+                        <button class="tool-btn" onclick="insertPageBreak()" title="إضافة صفحة جديدة">📄+ فاصل صفحات</button>
+                        <button class="tool-btn" onclick="clearFormat()" title="مسح التنسيق">🧹</button>
+                    </div>
+                    <div class="tool-group" style="margin-right: auto;">
+                        <input type="checkbox" id="showHeaders" onchange="toggleHeaders()" checked> 
+                        <label for="showHeaders" style="display:inline; margin:0; cursor:pointer; font-size:0.9rem">رؤوس الصفحات</label>
+                    </div>
+                </div>
+
+                <!-- Editor Paper -->
+                <div id="reportHeader" class="editor-stats" style="display:none; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #ddd; padding-bottom:5px;">
+                    <span id="headerTitle">عنوان التقرير</span>
+                    <span id="headerName">اسم الطالب</span>
+                </div>
+
+                <div id="reportEditor" class="editor-paper font-sans" contenteditable="true" oninput="saveContent(); updateStats()"></div>
+
+                <div class="editor-stats">
+                    <span id="wordCount">0 كلمة</span> | 
+                    <span id="pageCount">1 صفحة (تقديري)</span>
+                </div>
+
+                <button class="btn btn-print" onclick="window.print()">
+                    طباعة التقرير بالكامل (الغلاف + المحتوى)
+                    <span style="font-size:1.2em">🖨️</span>
+                </button>
             </div>
-        </main>
+        </section>
+
     </div>
 
     <script>
+        // =========================================
+        // JAVASCRIPT LOGIC
+        // =========================================
+
         const studentsContainer = document.getElementById('studentsContainer');
         const prevStudents = document.getElementById('prevStudents');
         const a4Page = document.getElementById('a4Page');
+        const reportEditor = document.getElementById('reportEditor');
 
+        // --- TAB NAVIGATION ---
+        function switchTab(tabName) {
+            // Update Nav UI
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Switch Sections
+            document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            document.getElementById(`view-${tabName}`).classList.add('active');
+
+            // Sync Data when switching to editor
+            if(tabName === 'editor') syncHeaderData();
+        }
+
+        // --- COVER LOGIC ---
         function updateTheme() {
             const theme = document.getElementById('themeSelect').value;
             a4Page.setAttribute('data-theme', theme);
@@ -501,7 +618,10 @@
 
         function updateFont() {
             const font = document.getElementById('fontSelect').value;
-            a4Page.className = `a4-wrapper ${font}`; // Reset and add new class
+            // Update Cover Font
+            a4Page.className = `a4-wrapper ${font}`;
+            // Update Editor Font to match
+            reportEditor.className = `editor-paper ${font}`;
         }
 
         function addStudentField() {
@@ -546,15 +666,97 @@
             if (prevStudents.children.length === 0) {
                 prevStudents.innerHTML = '<div class="student-item" style="opacity:0.5">...</div>';
             }
+            
+            // Auto sync headers if editor is open
+            syncHeaderData();
         }
 
         function setText(targetId, inputId, defaultText) {
             const el = document.getElementById(inputId);
-            document.getElementById(targetId).textContent = el.value || defaultText;
+            const val = el.value || defaultText;
+            document.getElementById(targetId).textContent = val;
+            return val;
         }
 
-        // Init
-        updatePreview();
+        // --- EDITOR LOGIC ---
+        
+        // Editor Commands
+        function execCmd(command, value = null) {
+            document.execCommand(command, false, value);
+            reportEditor.focus();
+        }
+
+        function changeSize(size) {
+            // Apply font size to selection via span to allow mixed sizes
+            // Using execCommand fontSize is limited (1-7), so we use styleWithCSS or insertHTML
+            // Simple approach for this app: Toggle class on current block or insert span
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const span = document.createElement("span");
+                span.style.fontSize = size;
+                span.textContent = sel.toString();
+                if (sel.toString().length > 0) {
+                    execCmd('insertHTML', span.outerHTML);
+                } else {
+                    // If no selection, just change editor base style (simple mode)
+                    reportEditor.style.fontSize = size;
+                }
+            }
+        }
+
+        function clearFormat() {
+            execCmd('removeFormat');
+            execCmd('unlink');
+        }
+
+        function insertPageBreak() {
+            const pageBreak = `<div class="page-break-marker" contenteditable="false"></div><br>`;
+            execCmd('insertHTML', pageBreak);
+        }
+
+        // Stats & Persistence
+        function saveContent() {
+            localStorage.setItem('reportContent', reportEditor.innerHTML);
+        }
+
+        function loadContent() {
+            const saved = localStorage.getItem('reportContent');
+            if (saved) reportEditor.innerHTML = saved;
+        }
+
+        function updateStats() {
+            const text = reportEditor.innerText || '';
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            document.getElementById('wordCount').textContent = words + ' كلمة';
+            
+            // Estimate pages (avg 300 words per page or by height)
+            const height = reportEditor.scrollHeight;
+            const pageHeight = 1122; // approx A4 px at 96dpi
+            const estPages = Math.ceil(height / pageHeight) || 1;
+            document.getElementById('pageCount').textContent = estPages + ' صفحة (تقديري)';
+        }
+
+        // Sync Header/Footer Data
+        function syncHeaderData() {
+            const title = document.getElementById('reportTitle').value || 'عنوان التقرير';
+            const firstStudent = document.querySelector('.student-input').value || 'اسم الطالب';
+            
+            document.getElementById('headerTitle').textContent = title;
+            document.getElementById('headerName').textContent = firstStudent;
+        }
+
+        function toggleHeaders() {
+            const show = document.getElementById('showHeaders').checked;
+            document.getElementById('reportHeader').style.display = show ? 'flex' : 'none';
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            updatePreview();
+            loadContent();
+            updateStats();
+        };
+
     </script>
 </body>
 </html>
