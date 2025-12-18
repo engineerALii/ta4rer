@@ -237,11 +237,12 @@
             left: 0;
             width: 100%; 
             height: 100%;
-            /* Using fill to stretch exactly to A4, or use 'cover' to crop but fill. 
-               'fill' guarantees no spill if width/height are 100%. */
-            object-fit: fill; 
+            /* CHANGED TO CONTAIN: Ensures image fits inside A4 without spilling, 
+               even if it leaves white borders */
+            object-fit: contain; 
+            background-color: white; /* Fill empty space with white */
             z-index: 5;
-            display: none; /* Hidden by default */
+            display: none; 
             margin: 0;
             padding: 0;
             border: none;
@@ -260,6 +261,7 @@
         /* Remove padding when image is present to allow full bleed */
         .a4-wrapper.has-image {
             padding: 0 !important;
+            background-color: white !important;
         }
 
         /* Editor Paper */
@@ -341,28 +343,27 @@
         .font-poppins { font-family: 'Poppins', sans-serif !important; }
 
         /* =========================================
-           6. PRINT STYLES (CRITICAL FIX)
+           6. PRINT STYLES (CRITICAL MOBILE FIX)
            ========================================= */
         @media print {
-            /* Force reset of all margins to prevent spillover */
             @page {
                 size: A4;
-                margin: 0;
+                margin: 0; /* Important: Removes default browser headers/footers */
             }
 
             html, body { 
+                width: 210mm;
+                height: 100%;
                 background: white; 
                 margin: 0 !important; 
                 padding: 0 !important; 
                 display: block; 
-                height: 100%;
-                width: 100%;
                 overflow: visible !important;
             }
             
             .ios-app {
-                width: 100%; max-width: none;
-                height: auto;
+                width: 100%; 
+                max-width: none;
                 background: white;
                 box-shadow: none;
                 position: static;
@@ -385,15 +386,13 @@
                 margin: 0 !important;
                 height: auto !important;
                 overflow: visible !important;
-                width: 100%;
             }
 
-            /* Views */
+            /* Force Show Printable Views */
             #view-cover, #view-editor {
                 display: block !important;
                 opacity: 1 !important;
                 transform: none !important;
-                height: auto !important;
                 overflow: visible !important;
                 margin: 0 !important;
                 padding: 0 !important;
@@ -405,6 +404,7 @@
                 page-break-after: always;
                 page-break-inside: avoid;
             }
+            
             .preview-container { 
                 display: block !important; 
                 margin: 0 !important; 
@@ -412,44 +412,29 @@
                 width: 100%;
             }
 
-            /* A4 Wrapper Print Settings - STRICT SIZING */
+            /* A4 Wrapper Print Settings - MOBILE FIX */
             .a4-wrapper { 
                 width: 210mm !important; 
                 height: 297mm !important;
-                max-height: 297mm !important;
-                margin: 0 !important; /* Zero margin to fit page exactly */
+                /* Limit height strictly to avoid mobile spillover */
+                max-height: 297mm !important; 
+                margin: 0 !important;
                 padding: 20mm !important;
                 box-shadow: none !important; 
                 border: none !important;
                 transform: none !important; 
-                overflow: hidden !important; /* Force Clip any bleeding content */
+                overflow: hidden !important; 
                 print-color-adjust: exact;
                 -webkit-print-color-adjust: exact;
                 position: relative !important;
                 page-break-after: always;
-                box-sizing: border-box;
+                page-break-inside: avoid;
             }
 
-            /* Editor Content */
-            .editor-paper {
-                width: 210mm !important;
-                margin: 0 auto !important;
-                padding: 25.4mm !important;
-                box-shadow: none !important;
-                border: none !important;
-                min-height: auto !important;
-                height: auto !important;
-                overflow: visible !important;
-            }
-
-            /* Ensure Text Color is Black */
-            * { color: black !important; text-shadow: none !important; }
-            
-            /* IMAGE PRINT FIX - FORCE CONTAINMENT */
+            /* Image Specific Fix for Mobile Print */
             .a4-wrapper.has-image {
                 padding: 0 !important;
-                background: none !important;
-                margin: 0 !important;
+                background: white !important; /* Ensure white background for borders */
             }
             
             #coverImgDisplay {
@@ -461,10 +446,26 @@
                 position: absolute !important;
                 top: 0; left: 0;
                 width: 210mm !important;
-                height: 297mm !important;
-                object-fit: fill !important;
+                /* Slightly reduce height to 296.5mm to prevent mobile browser adding extra blank page */
+                height: 296.5mm !important; 
+                /* Contain image to ensure it fits completely within page bounds */
+                object-fit: contain !important;
+                object-position: center center !important;
                 z-index: 5;
             }
+
+            /* Editor Content */
+            .editor-paper {
+                width: 210mm !important;
+                margin: 0 auto !important;
+                padding: 25.4mm !important;
+                box-shadow: none !important;
+                border: none !important;
+                min-height: auto !important;
+                overflow: visible !important;
+            }
+
+            * { color: black !important; text-shadow: none !important; }
         }
     </style>
 </head>
