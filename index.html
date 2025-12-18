@@ -3,46 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحرر الجامعي الشامل | غلاف + تقرير</title>
+    <title>المحرر الجامعي الشامل | Dark Glass</title>
+    
+    <!-- Site Icons (Favicon & Apple Touch) -->
+    <link rel="icon" href="https://logo-icons.com/cdn/shop/files/201-logo-1712247205.834color-A52A2A.svg?v=1712759420&width=416" type="image/svg+xml">
+    <link rel="shortcut icon" href="https://logo-icons.com/cdn/shop/files/201-logo-1712247205.834color-A52A2A.svg?v=1712759420&width=416" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="https://logo-icons.com/cdn/shop/files/201-logo-1712247205.834color-A52A2A.svg?v=1712759420&width=416">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&family=Tajawal:wght@300;500;800&display=swap" rel="stylesheet">
+
     <style>
         /* =========================================
-           1. CORE VARIABLES & RESET
+           1. CORE VARIABLES & RESET (DARK THEME)
            ========================================= */
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --text-main: #1e293b;
-            --text-secondary: #64748b;
+            /* Dark Glass Theme Colors */
+            --bg-dark: #0f172a;
+            --glass-bg: rgba(30, 41, 59, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            
+            --primary-color: #3b82f6; /* Lighter blue for dark mode */
+            --primary-hover: #60a5fa;
+            --text-main: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --input-bg: rgba(15, 23, 42, 0.6);
             --danger: #ef4444;
             
-            /* Fonts */
-            --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --font-serif: 'Times New Roman', Times, serif;
-            --font-academic: 'Traditional Arabic', 'Simplified Arabic', serif;
-            --font-kufi: 'Tahoma', 'Segoe UI', sans-serif;
-            --font-digital: 'Courier New', Courier, monospace;
+            /* Enhanced Fonts */
+            --font-sans: 'Poppins', 'Tajawal', sans-serif;
+            --font-serif: 'Playfair Display', 'Times New Roman', serif;
+            --font-cairo: 'Cairo', sans-serif; /* Modern Arabic */
+            --font-amiri: 'Amiri', serif; /* Classic Arabic */
+            --font-tajawal: 'Tajawal', sans-serif; /* Elegant Arabic */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
         body {
-            font-family: var(--font-sans);
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+            font-family: var(--font-tajawal); /* Default Font */
+            background: #020617; /* Very dark base */
             color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* Decorative Background */
-        .bg-orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.6; }
-        .bg-orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #bfdbfe; }
-        .bg-orb-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: #ddd6fe; }
+        /* Animated Dark Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.15), transparent 25%);
+            z-index: -2;
+            animation: pulseBg 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        /* Decorative Orbs */
+        .bg-orb { position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.4; pointer-events: none; }
+        .bg-orb-1 { top: -20%; left: -10%; width: 60vw; height: 60vw; background: #1e40af; }
+        .bg-orb-2 { bottom: -20%; right: -10%; width: 60vw; height: 60vw; background: #4c1d95; }
 
         /* =========================================
            2. NAVIGATION
@@ -50,33 +83,33 @@
         .main-nav {
             display: flex;
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            padding: 5px;
+            backdrop-filter: blur(20px);
+            padding: 6px;
             border-radius: 16px;
             box-shadow: var(--glass-shadow);
             margin-bottom: 25px;
             position: sticky;
-            top: 10px;
+            top: 20px;
             z-index: 100;
             border: 1px solid var(--glass-border);
         }
 
         .nav-item {
-            padding: 12px 25px;
+            padding: 12px 30px;
             cursor: pointer;
             border-radius: 12px;
             font-weight: 700;
             color: var(--text-secondary);
             transition: 0.3s;
-            display: flex; gap: 8px; align-items: center;
+            display: flex; gap: 10px; align-items: center;
         }
-        .nav-item:hover { color: var(--primary-color); background: rgba(37, 99, 235, 0.05); }
-        .nav-item.active { background: var(--primary-color); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .nav-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+        .nav-item.active { background: var(--primary-color); color: white; box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
 
         /* =========================================
-           3. LAYOUT
+           3. LAYOUT & PANELS
            ========================================= */
-        .app-container { width: 100%; max-width: 1400px; }
+        .app-container { width: 100%; max-width: 1400px; margin-bottom: 60px; }
 
         .section-view { display: none; opacity: 0; transform: translateY(10px); transition: 0.4s; }
         .section-view.active { display: flex; opacity: 1; transform: translateY(0); }
@@ -84,95 +117,210 @@
         #view-cover { gap: 30px; flex-wrap: wrap; }
         #view-editor { flex-direction: column; align-items: center; width: 100%; }
 
-        /* Panels */
+        /* Controls Panel (Dark Glass) */
         .controls-panel {
-            flex: 1; min-width: 320px;
-            background: var(--glass-bg); backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 20px;
-            padding: 25px; box-shadow: var(--glass-shadow); height: fit-content;
+            flex: 1; min-width: 340px;
+            background: var(--glass-bg); 
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); 
+            border-radius: 24px;
+            padding: 30px; 
+            box-shadow: var(--glass-shadow); 
+            height: fit-content;
         }
 
         .preview-panel { flex: 2; min-width: 350px; display: flex; justify-content: center; padding-bottom: 50px; }
 
         /* UI Elements */
-        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #0f172a; display: flex; gap: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85rem; color: var(--text-secondary); }
+        h1 { font-size: 1.4rem; margin-bottom: 25px; color: #fff; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: var(--text-secondary); }
+        
         input, select {
-            width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #cbd5e1;
-            background: rgba(255,255,255,0.9); font-family: inherit; font-size: 0.95rem;
+            width: 100%; padding: 12px 15px; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1);
+            background: var(--input-bg); 
+            color: #fff;
+            font-family: inherit; font-size: 0.95rem;
+            transition: 0.3s;
         }
-        input:focus, select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        input::placeholder { color: rgba(255,255,255,0.3); }
+        input:focus, select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); background: rgba(15, 23, 42, 0.9); }
+        
+        /* Dark Scrollbar for Select */
+        select option { background: #0f172a; color: white; }
 
-        .btn { border: none; cursor: pointer; border-radius: 8px; font-family: inherit; font-weight: 600; padding: 10px; display: flex; justify-content: center; gap: 8px; transition: 0.2s; }
-        .btn-add { background: #f1f5f9; color: var(--primary-color); width: 100%; margin-top: 8px; }
-        .btn-remove { background: #fee2e2; color: var(--danger); padding: 8px 12px; }
-        .btn-print { background: var(--primary-color); color: white; padding: 14px; width: 100%; margin-top: 25px; font-size: 1.1rem; box-shadow: 0 4px 12px rgba(37,99,235,0.25); }
-        .btn-print:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        /* File Upload Styling */
+        input[type="file"] {
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            cursor: pointer;
+        }
+        input[type="file"]::-webkit-file-upload-button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-family: inherit;
+        }
+
+        /* Buttons */
+        .btn { border: none; cursor: pointer; border-radius: 12px; font-family: inherit; font-weight: 600; padding: 12px; display: flex; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-add { background: rgba(255,255,255,0.1); color: var(--primary-color); width: 100%; margin-top: 8px; }
+        .btn-add:hover { background: rgba(255,255,255,0.15); }
+        .btn-remove { background: rgba(239, 68, 68, 0.15); color: var(--danger); padding: 8px 12px; border-radius: 8px; }
+        .btn-remove:hover { background: rgba(239, 68, 68, 0.25); }
+        
+        .btn-print { 
+            background: linear-gradient(135deg, var(--primary-color), #2563eb); 
+            color: white; padding: 16px; width: 100%; margin-top: 30px; 
+            font-size: 1.1rem; 
+            box-shadow: 0 10px 25px rgba(37,99,235,0.3); 
+            letter-spacing: 0.5px;
+        }
+        .btn-print:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(37,99,235,0.4); }
 
         /* =========================================
-           4. EDITOR & FONT FIXES
+           4. EDITOR & A4 PREVIEW
            ========================================= */
         .editor-wrapper { width: 100%; max-width: 210mm; margin: 0 auto; }
 
         .editor-toolbar {
-            background: var(--glass-bg); backdrop-filter: blur(15px);
-            padding: 10px; border-radius: 12px; border: 1px solid var(--glass-border);
-            display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;
-            position: sticky; top: 80px; z-index: 90;
+            background: var(--glass-bg); backdrop-filter: blur(25px);
+            padding: 12px; border-radius: 16px; border: 1px solid var(--glass-border);
+            display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px;
+            position: sticky; top: 90px; z-index: 90;
         }
 
-        .tool-group { display: flex; gap: 5px; padding-left: 10px; border-left: 1px solid #e2e8f0; align-items: center; }
+        .tool-group { display: flex; gap: 5px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.1); align-items: center; }
         .tool-group:last-child { border: none; }
-        .tool-btn { background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 6px 10px; cursor: pointer; font-size: 1rem; }
-        .tool-btn:hover { background: rgba(0,0,0,0.05); }
-
-        /* Override browser font sizes to match requirement */
-        font[size="3"] { font-size: 12pt !important; }
-        font[size="5"] { font-size: 14pt !important; }
-        font[size="7"] { font-size: 18pt !important; }
+        .tool-btn { background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 1.1rem; color: var(--text-main); transition: 0.2s; }
+        .tool-btn:hover { background: rgba(255,255,255,0.1); color: white; }
 
         .editor-paper {
             background: white; width: 100%; min-height: 297mm;
-            padding: 25.4mm; /* 1 inch */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            font-size: 12pt; line-height: 1.6; color: #000;
+            padding: 25.4mm;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); /* Strong shadow for dark mode */
+            font-size: 14pt; line-height: 1.6; color: #000;
             direction: rtl; outline: none;
+            overflow-wrap: break-word; word-wrap: break-word; white-space: pre-wrap;
             
-            /* --- CRITICAL FIX FOR OVERFLOWING TEXT --- */
-            overflow-wrap: break-word;   /* Standard */
-            word-wrap: break-word;       /* Legacy */
-            word-break: break-word;      /* For very long words */
-            white-space: pre-wrap;       /* Preserve lines but wrap text */
+            /* --- CURSOR & FOCUS INDICATOR --- */
+            caret-color: var(--primary-color); /* Blue Cursor */
+            transition: box-shadow 0.2s ease;
+        }
+
+        /* Focus Ring: Shows when user is typing */
+        .editor-paper:focus {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3), 0 20px 50px rgba(0,0,0,0.5);
         }
         
-        /* Prevent Images/Tables from overflowing */
-        .editor-paper img,
-        .editor-paper table,
-        .editor-paper video,
-        .editor-paper iframe {
-            max-width: 100% !important;
-            height: auto !important;
+        /* A4 Cover Wrapper */
+        .a4-wrapper {
+            background: white;
+            width: 210mm;
+            height: 297mm; /* Strictly A4 height, no min-height to ensure image fits perfectly */
+            padding: 20mm;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+            position: relative; 
+            transform-origin: top center; 
+            transition: 0.3s; 
+            overflow: hidden; 
+            color: #000;
+            background-size: contain; /* Changed to contain to show full image without distortion */
+            background-repeat: no-repeat;
+            background-position: center;
         }
+
+        /* When image is uploaded, hide text content */
+        .a4-wrapper.has-image .report-content-wrapper { display: none; }
+
+        /* Prevent Overflow */
+        .editor-paper img, .editor-paper table { max-width: 100% !important; height: auto !important; }
 
         .page-break-marker {
-            border-bottom: 2px dashed #cbd5e1; margin: 20px -25.4mm;
+            border-bottom: 2px dashed #94a3b8; margin: 30px -25.4mm;
             position: relative; height: 20px; page-break-after: always;
             display: flex; justify-content: center; align-items: center;
-            color: #94a3b8; font-size: 0.8rem; pointer-events: none;
+            color: #64748b; font-size: 0.8rem; pointer-events: none;
         }
-        .page-break-marker::after { content: 'فاصل صفحات'; background: #f1f5f9; padding: 0 10px; }
+        .page-break-marker::after { content: 'فاصل صفحات'; background: #f1f5f9; padding: 2px 10px; border-radius: 10px; border: 1px solid #cbd5e1; }
 
         /* =========================================
-           5. A4 PREVIEW (Cover)
+           5. DEVELOPER CREDITS (STATIC)
            ========================================= */
-        .a4-wrapper {
-            background: white; width: 210mm; min-height: 297mm; padding: 20mm;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative;
-            transform-origin: top center; transition: 0.3s; overflow: hidden; color: #000;
+        .credits-footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-family: 'Tajawal', sans-serif;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Common Elements */
+        .credits-footer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .credits-icon {
+            width: 28px; height: 28px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 16px;
+        }
+        
+        /* SVG Icon Style */
+        .credits-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .developer-name {
+            color: #f1f5f9;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        
+        .copyright-year { color: var(--primary-color); font-size: 0.85em; font-weight: 600; }
+
+        /* =========================================
+           6. THEMES & FONTS
+           ========================================= */
+        /* Themes logic */
+        [data-theme="formal"] { border: 1px solid #ccc; }
+        [data-theme="formal"] .report-header { border-bottom: 3px double #000; padding-bottom: 20px; }
+        [data-theme="formal"] .report-title { text-decoration: underline; text-underline-offset: 8px; }
+        
+        [data-theme="modern"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 15mm; background: linear-gradient(90deg, #1e3a8a, #3b82f6); }
+        [data-theme="modern"] .report-title { color: #1e3a8a; }
+
+        /* Fonts */
+        .font-cairo { font-family: 'Cairo', sans-serif !important; }
+        .font-tajawal { font-family: 'Tajawal', sans-serif !important; }
+        .font-amiri { font-family: 'Amiri', serif !important; }
+        .font-poppins { font-family: 'Poppins', sans-serif !important; }
+
+        /* Common Elements inside A4 */
         .report-header { text-align: center; margin-bottom: 40px; }
         .uni-logo-placeholder { width: 80px; height: 80px; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2rem; margin: 0 auto 15px; }
         .report-title { font-size: 2.2rem; font-weight: 800; margin: 30px 0; line-height: 1.3; text-align: center; }
@@ -180,82 +328,43 @@
         .meta-row { display: flex; margin-bottom: 12px; font-size: 1.1rem; }
         .meta-label { font-weight: bold; width: 120px; }
 
-        /* Themes */
-        [data-theme="formal"] { border: 1px solid #ccc; }
-        [data-theme="formal"] .report-header { border-bottom: 3px double #000; padding-bottom: 20px; }
-        [data-theme="formal"] .report-title { text-decoration: underline; text-underline-offset: 8px; }
-        [data-theme="formal"] .report-meta { border: 1px solid #000; }
-
-        [data-theme="modern"] .uni-logo-placeholder { background: white; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        [data-theme="modern"]::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 20mm; background: linear-gradient(to right, #2563eb, #60a5fa); }
-        [data-theme="modern"] .report-title { color: #2563eb; }
-
-        /* Fonts classes */
-        .font-sans { font-family: var(--font-sans) !important; }
-        .font-serif { font-family: var(--font-serif) !important; }
-        .font-academic { font-family: var(--font-academic) !important; }
-        .font-kufi { font-family: var(--font-kufi) !important; }
-        .font-digital { font-family: var(--font-digital) !important; }
 
         /* =========================================
-           6. RESPONSIVE & PRINT FIXES
+           7. RESPONSIVE & PRINT
            ========================================= */
         @media (max-width: 900px) {
             #view-cover { flex-direction: column; }
             .preview-panel { display: block; }
             .a4-wrapper { transform: scale(0.42); transform-origin: top center; margin: 0 auto; }
             .editor-wrapper { width: 100%; transform: scale(0.9); transform-origin: top center; }
-            .controls-panel { position: static; }
+            .controls-panel { position: static; width: 100%; margin-bottom: 20px; }
+            .credits-footer { bottom: 10px; right: 10px; font-size: 0.8rem; padding: 8px 15px; }
         }
 
-        /* PRINT CONFIGURATION - CRITICAL FIXES */
         @media print {
             @page { size: A4; margin: 0; }
-            
-            html, body {
-                height: auto;
-                background: white;
-                margin: 0; padding: 0;
-                overflow: visible !important;
-                display: block;
+            html, body { 
+                background: white; margin: 0; padding: 0; height: auto; 
+                color: black; overflow: visible !important; display: block; 
             }
-
-            /* Hide UI */
-            .main-nav, .controls-panel, .editor-toolbar, .btn, .bg-orb, .editor-stats { display: none !important; }
+            .main-nav, .controls-panel, .editor-toolbar, .btn, .bg-orb, .credits-footer, .editor-stats { display: none !important; }
+            .app-container, .preview-panel, .section-view { width: 100%; max-width: none; display: block !important; opacity: 1 !important; transform: none !important; margin: 0; padding: 0; }
             
-            /* Layout Reset */
-            .app-container, .preview-panel, .section-view {
-                width: 100%; max-width: none; display: block !important; opacity: 1 !important; transform: none !important; margin: 0; padding: 0;
-            }
-
-            /* Cover Page */
             #view-cover { display: block !important; page-break-after: always; }
-            #a4Page {
-                width: 210mm; min-height: 297mm; margin: 0 auto;
-                box-shadow: none; border: none; transform: none !important;
+            #a4Page { 
+                width: 210mm; height: 297mm; margin: 0 auto; box-shadow: none; border: none; transform: none !important; 
+                print-color-adjust: exact; -webkit-print-color-adjust: exact;
                 page-break-after: always;
             }
-
-            /* Editor Content */
+            
             #view-editor { display: block !important; }
             .editor-wrapper { width: 100%; max-width: none; margin: 0; transform: none !important; }
-            .editor-paper {
-                width: 100%; max-width: 210mm; margin: 0 auto;
-                padding: 20mm; /* Safe print margin */
-                box-shadow: none; border: none;
-                overflow: visible !important;
-                min-height: auto;
-                /* Force wrap on print too */
-                overflow-wrap: break-word;
-                word-wrap: break-word;
-                white-space: pre-wrap;
+            .editor-paper { 
+                width: 100%; max-width: 210mm; margin: 0 auto; padding: 20mm; box-shadow: none; border: none; 
+                overflow: visible !important; min-height: auto;
+                overflow-wrap: break-word; word-wrap: break-word; white-space: pre-wrap;
             }
-            .editor-paper * {
-                max-width: 100% !important;
-            }
-            
-            /* Ensure page breaks work */
-            .page-break-marker { border: none; height: 0; margin: 0; visibility: hidden; page-break-after: always; }
+            .page-break-marker { display: none; }
         }
     </style>
 </head>
@@ -270,56 +379,73 @@
 
     <div class="app-container">
         
-        <!-- COVER -->
+        <!-- COVER SECTION -->
         <section id="view-cover" class="section-view active">
             <aside class="controls-panel">
-                <h1>⚙️ الإعدادات</h1>
+                <h1>⚙️ إعدادات الغلاف</h1>
+                
                 <div class="form-group">
-                    <label>التصميم</label>
+                    <label>صورة غلاف كاملة (بديل للكتابة)</label>
+                    <input type="file" id="coverImageInput" accept="image/*" onchange="handleCoverImage(this)">
+                    <button class="btn btn-remove" onclick="removeCoverImage()" style="margin-top:5px; display:none;" id="removeImgBtn">❌ حذف الصورة</button>
+                </div>
+
+                <div class="form-group">
+                    <label>الخط (Fonts)</label>
+                    <select id="fontSelect" onchange="updateFont()">
+                        <option value="font-tajawal">Tajawal (أنيق)</option>
+                        <option value="font-cairo">Cairo (عصري)</option>
+                        <option value="font-amiri">Amiri (كلاسيكي)</option>
+                        <option value="font-poppins">Poppins (English)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>التصميم (Theme)</label>
                     <select id="themeSelect" onchange="updateTheme()">
                         <option value="formal">رسمي أكاديمي</option>
-                        <option value="modern">مودرن</option>
+                        <option value="modern">مودرن ملون</option>
                         <option value="corporate">شركات</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>الخط</label>
-                    <select id="fontSelect" onchange="updateFont()">
-                        <option value="font-sans">حديث</option>
-                        <option value="font-serif">تقليدي</option>
-                        <option value="font-academic">أكاديمي</option>
-                    </select>
+                
+                <hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin: 20px 0;">
+
+                <!-- Text Inputs -->
+                <div id="textControls">
+                    <div class="form-group"><label>الجامعة</label><input type="text" id="uniName" placeholder="اسم الجامعة" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>عنوان التقرير</label><input type="text" id="reportTitle" placeholder="العنوان" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>المشرف</label><input type="text" id="supervisorName" placeholder="اسم المشرف" oninput="updatePreview()"></div>
+                    <div class="form-group">
+                        <label>الطلاب</label>
+                        <div id="studentsContainer"><input type="text" class="student-input" placeholder="اسم الطالب" oninput="updatePreview()" value="طالب 1"></div>
+                        <button class="btn btn-add" onclick="addStudent()">+ إضافة طالب</button>
+                    </div>
+                    <div class="form-group"><label>السنة</label><input type="text" id="yearText" placeholder="السنة الدراسية" oninput="updatePreview()"></div>
                 </div>
-                <!-- Inputs -->
-                <div class="form-group"><input type="text" id="uniName" placeholder="الجامعة" oninput="updatePreview()"></div>
-                <div class="form-group"><input type="text" id="reportTitle" placeholder="عنوان التقرير" oninput="updatePreview()"></div>
-                <div class="form-group"><input type="text" id="supervisorName" placeholder="المشرف" oninput="updatePreview()"></div>
-                <div class="form-group">
-                    <div id="studentsContainer"><input type="text" class="student-input" placeholder="اسم الطالب" oninput="updatePreview()" value="طالب 1"></div>
-                    <button class="btn btn-add" onclick="addStudent()">+ إضافة طالب</button>
-                </div>
-                <div class="form-group"><input type="text" id="yearText" placeholder="السنة الدراسية" oninput="updatePreview()"></div>
             </aside>
 
             <main class="preview-panel">
-                <div id="a4Page" class="a4-wrapper font-sans" data-theme="formal">
-                    <div class="report-header">
-                        <div class="uni-logo-placeholder">🏛️</div>
-                        <h2 id="prevUni">الجامعة</h2>
-                    </div>
-                    <div class="report-body">
-                        <h1 class="report-title" id="prevTitle">العنوان</h1>
-                        <div class="report-meta">
-                            <div class="meta-row"><span class="meta-label">إشراف:</span><span id="prevSupervisor">...</span></div>
-                            <div class="meta-row"><span class="meta-label">إعداد:</span><div id="prevStudents">...</div></div>
-                            <div class="meta-row"><span class="meta-label">العام:</span><span id="prevYear">...</span></div>
+                <div id="a4Page" class="a4-wrapper font-tajawal" data-theme="formal">
+                    <div class="report-content-wrapper">
+                        <div class="report-header">
+                            <div class="uni-logo-placeholder">🏛️</div>
+                            <h2 id="prevUni">الجامعة</h2>
+                        </div>
+                        <div class="report-body">
+                            <h1 class="report-title" id="prevTitle">العنوان</h1>
+                            <div class="report-meta">
+                                <div class="meta-row"><span class="meta-label">إشراف:</span><span id="prevSupervisor">...</span></div>
+                                <div class="meta-row"><span class="meta-label">إعداد:</span><div id="prevStudents">...</div></div>
+                                <div class="meta-row"><span class="meta-label">العام:</span><span id="prevYear">...</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </main>
         </section>
 
-        <!-- EDITOR -->
+        <!-- EDITOR SECTION -->
         <section id="view-editor" class="section-view">
             <div class="editor-wrapper">
                 <div class="editor-toolbar">
@@ -334,7 +460,6 @@
                         <button class="tool-btn" onclick="fmt('underline')"><u>U</u></button>
                     </div>
                     <div class="tool-group">
-                        <!-- Using Native Font Sizes 3, 5, 7 mapping to CSS -->
                         <button class="tool-btn" onclick="setSize(3)">S</button>
                         <button class="tool-btn" onclick="setSize(5)">M</button>
                         <button class="tool-btn" onclick="setSize(7)">L</button>
@@ -349,20 +474,30 @@
                     <span id="headerTitle">العنوان</span><span id="headerName">الطالب</span>
                 </div>
 
-                <div id="reportEditor" class="editor-paper font-sans" contenteditable="true" oninput="save()"></div>
+                <div id="reportEditor" class="editor-paper font-tajawal" contenteditable="true" oninput="save()"></div>
                 
-                <div class="editor-stats"><span id="wordCount">0 كلمة</span></div>
+                <div class="editor-stats" style="margin-top:10px; color:#94a3b8; font-size:0.9rem; text-align:left;"><span id="wordCount">0 كلمة</span></div>
                 
-                <button class="btn btn-print" onclick="window.print()">طباعة الملف بالكامل 🖨️</button>
+                <button class="btn btn-print" onclick="window.print()">طباعة الملف بالكامل (PDF) 🖨️</button>
             </div>
         </section>
 
     </div>
 
+    <!-- Developer Credits (Static) -->
+    <a href="https://instagram.com/c4man" target="_blank" class="credits-footer">
+        <span class="copyright-year">2026 ©</span>
+        <span class="developer-name">المطور والمُهندس علي عبدمسلم</span>
+        <div class="credits-icon" title="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+        </div>
+    </a>
+
     <script>
         // DOM Elements
         const a4 = document.getElementById('a4Page');
         const editor = document.getElementById('reportEditor');
+        const removeImgBtn = document.getElementById('removeImgBtn');
 
         // Tabs
         function switchTab(tab) {
@@ -373,18 +508,44 @@
             if(tab === 'editor') syncHeader();
         }
 
-        // Cover Logic
+        // --- Cover Logic & Image ---
         function updateTheme() { a4.setAttribute('data-theme', document.getElementById('themeSelect').value); }
+        
         function updateFont() { 
             const f = document.getElementById('fontSelect').value;
-            a4.className = `a4-wrapper ${f}`;
-            editor.className = `editor-paper ${f}`;
+            // Remove old font classes
+            a4.classList.remove('font-cairo', 'font-tajawal', 'font-amiri', 'font-poppins');
+            editor.classList.remove('font-cairo', 'font-tajawal', 'font-amiri', 'font-poppins');
+            // Add new
+            a4.classList.add(f);
+            editor.classList.add(f);
         }
+
+        function handleCoverImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    a4.style.backgroundImage = `url(${e.target.result})`;
+                    a4.classList.add('has-image');
+                    removeImgBtn.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeCoverImage() {
+            a4.style.backgroundImage = 'none';
+            a4.classList.remove('has-image');
+            document.getElementById('coverImageInput').value = '';
+            removeImgBtn.style.display = 'none';
+        }
+
         function addStudent() {
             const d = document.createElement('div');
             d.innerHTML = `<input class="student-input" style="margin-top:5px" placeholder="طالب آخر" oninput="updatePreview()">`;
             document.getElementById('studentsContainer').appendChild(d);
         }
+
         function updatePreview() {
             document.getElementById('prevUni').textContent = document.getElementById('uniName').value || 'الجامعة';
             document.getElementById('prevTitle').textContent = document.getElementById('reportTitle').value || 'العنوان';
@@ -398,31 +559,24 @@
             syncHeader();
         }
 
-        // Editor Logic - Using Native Commands for Stability
+        // --- Editor Logic ---
         function fmt(cmd, val=null) { 
             document.execCommand(cmd, false, val); 
             editor.focus(); 
         }
-        
-        // Robust Size Changing
         function setSize(size) {
-            // This uses <font size="X"> which we style via CSS
             document.execCommand('fontSize', false, size);
             editor.focus();
         }
-
         function insertBreak() {
-            // Insert a marker that acts as page break
             const html = `<div class="page-break-marker" contenteditable="false"></div><br>`;
             document.execCommand('insertHTML', false, html);
         }
-
         function save() {
             localStorage.setItem('content', editor.innerHTML);
             const w = editor.innerText.trim().split(/\s+/).length;
             document.getElementById('wordCount').textContent = (editor.innerText ? w : 0) + ' كلمة';
         }
-
         function syncHeader() {
             document.getElementById('headerTitle').textContent = document.getElementById('reportTitle').value;
             const f = document.querySelector('.student-input');
